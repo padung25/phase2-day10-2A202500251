@@ -30,12 +30,16 @@ class CacheConfig(BaseModel):
 
 class LoadTestConfig(BaseModel):
     requests: int = Field(gt=0)
+    concurrency: int = Field(default=1, gt=0)
 
 
 class ScenarioConfig(BaseModel):
     name: str
     description: str = ""
     provider_overrides: dict[str, float] = Field(default_factory=dict)
+    # When set, overrides LabConfig.cache.enabled for this scenario only.
+    # Useful for circuit-breaker scenarios that need real provider calls (not cache hits).
+    cache_enabled: bool | None = None
 
 
 class LabConfig(BaseModel):
